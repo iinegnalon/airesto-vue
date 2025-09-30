@@ -10,6 +10,12 @@ const props = defineProps<{
 
 <template>
   <div class="table-column">
+    <div class="table-column__info">
+      <div>#{{ table.number }}</div>
+      <div>{{ table.capacity }} чел</div>
+      <div>{{ table.zone }}</div>
+    </div>
+
     <BookingEvent
       v-for="event in table.orders"
       :key="event.id"
@@ -46,9 +52,22 @@ const props = defineProps<{
   position: relative;
   border-right: 1px solid #444;
   width: 100%;
+  min-width: 80px;
 
   &:last-child {
     border-right: none;
+  }
+
+  &__info {
+    height: var(--table-column-info-height);
+    position: absolute;
+    top: calc(-1 * var(--table-column-info-height));
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
   }
 }
 </style>

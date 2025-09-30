@@ -1,15 +1,20 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
-import type { BookingResponse } from '~/models/reservations';
+import { computed, onMounted } from 'vue';
 import TableColumn from '~/components/reservations/TableColumn';
-import { fetchReservations } from '~/api/reservations';
 import { durationMinutes, getMinutesFromHHmm } from '~/utils/utils';
+import { useReservationsStore } from '~/store/reservations';
 
 const stepMinutes = 30;
 
-const reservations = ref<BookingResponse>(null);
-const loading = ref(true);
+const reservationsStore = useReservationsStore();
 
+const reservations = computed(() => reservationsStore.data);
+const filteredTables = computed(() => reservationsStore.filteredTables);
+const availableDays = computed(() => reservationsStore.availableDays);
+const allZones = computed(() => reservationsStore.allZones);
+const selectedDay = computed(() => reservationsStore.selectedDay);
+const selectedZones = computed(() => reservationsStore.selectedZones);
+const loading = computed(() => reservationsStore.loading);
 const openMinutes = computed(() => {
   return getMinutesFromHHmm(reservations.value.restaurant.opening_time);
 });
@@ -26,18 +31,8 @@ const timeSlots = computed(() => {
 });
 
 onMounted(() => {
-  initTable();
+  reservationsStore.load();
 });
-
-async function initTable() {
-  try {
-    reservations.value = await fetchReservations();
-  } catch (e) {
-    console.log(e);
-  } finally {
-    loading.value = false;
-  }
-}
 
 function generateTimeSlots(): string[] {
   const slots: string[] = [];
@@ -52,43 +47,76 @@ function generateTimeSlots(): string[] {
 
   return slots;
 }
+
+function topPercent(index: number): number {
+  return ((stepMinutes * index) / totalMinutes.value) * 100;
+}
 </script>
 
 <template>
-  <div class="booking-table-wrapper">
+  <div>
     <div v-if="loading">Loading...</div>
 
-    <div v-else-if="reservations" class="booking-table">
-      <div class="booking-table__dividers">
-        <div
-          v-for="(_, index) in timeSlots"
-          :key="index"
-          :style="{
-            top: `${((stepMinutes * index) / totalMinutes) * 100}%`,
-          }"
-          class="booking-table__divider"
-        ></div>
-      </div>
+    <div v-else-if="reservations" class="booking-table-wrapper">
+      <div class="booking-table__title">Бронирования</div>
 
-      <div class="booking-table__hours">
-        <div
-          v-for="(time, index) in timeSlots"
-          :key="index"
-          :style="{
-            top: `${((stepMinutes * index) / totalMinutes) * 100}%`,
-          }"
-          class="booking-table__hour"
-        >
-          {{ time }}
+      <div class="booking-table__filters">
+        <div class="booking-table__filters-date">
+          <button
+            v-for="(date, index) in availableDays"
+            :key="index"
+            :class="{ active: selectedDay === date }"
+            class="filter-button"
+            @click="reservationsStore.setDay(date)"
+          >
+            {{ date }}
+          </button>
+        </div>
+        <div class="booking-table__filters-zone">
+          <button
+            v-for="zone in allZones"
+            :key="zone"
+            :class="{ active: selectedZones.includes(zone) }"
+            class="filter-button"
+            @click="reservationsStore.toggleZone(zone)"
+          >
+            {{ zone }}
+          </button>
         </div>
       </div>
 
-      <TableColumn
-        v-for="table in reservations.tables"
-        :key="table.id"
-        :restaurant="reservations.restaurant"
-        :table="table"
-      />
+      <div class="booking-table">
+        <div class="booking-table__dividers">
+          <div
+            v-for="(_, index) in timeSlots"
+            :key="index"
+            :style="{
+              top: `${topPercent(index)}%`,
+            }"
+            class="booking-table__divider"
+          ></div>
+        </div>
+
+        <div class="booking-table__hours">
+          <div
+            v-for="(time, index) in timeSlots"
+            :key="index"
+            :style="{
+              top: `${topPercent(index)}%`,
+            }"
+            class="booking-table__hour"
+          >
+            {{ time }}
+          </div>
+        </div>
+
+        <TableColumn
+          v-for="table in filteredTables"
+          :key="table.id"
+          :restaurant="reservations.restaurant"
+          :table="table"
+        />
+      </div>
     </div>
 
     <div v-else>No reservations</div>
@@ -96,11 +124,37 @@ function generateTimeSlots(): string[] {
 </template>
 
 <style lang="scss" scoped>
+.booking-table-wrapper {
+  padding: 20px;
+}
+
+.booking-table__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.booking-table__filters {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  &-date,
+  &-zone {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+}
+
 .booking-table {
   display: flex;
   width: 100%;
   min-height: 1040px;
   position: relative;
+  margin-top: var(--table-column-info-height);
+  margin-bottom: 20px;
 
   &__hours {
     position: relative;
@@ -117,9 +171,6 @@ function generateTimeSlots(): string[] {
     padding-right: 8px;
     text-align: right;
     width: 100%;
-  }
-
-  &__dividers {
   }
 
   &__divider {
