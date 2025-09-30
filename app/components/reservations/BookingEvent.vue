@@ -14,12 +14,15 @@ interface BookingEvent {
   name_for_reservation?: string;
 }
 
+type EventType = 'order' | 'reservation';
+
 const props = defineProps<{
   event: BookingEvent;
   openingTime: string;
   closingTime: string;
   index?: number;
   total?: number;
+  type: EventType;
 }>();
 
 const openMinutes = getMinutesFromHHmm(props.openingTime);
@@ -52,11 +55,28 @@ const endHour = computed(
     ':' +
     String(endMinutes % 60).padStart(2, '0'),
 );
+const eventClass = computed(() => {
+  if (props.event.status.toLowerCase() === 'banquet') {
+    return 'booking-event--banquet';
+  }
+
+  if (props.event.status.toLowerCase() === 'живая очередь') {
+    return 'booking-event--queue';
+  }
+
+  if (props.type === 'order') {
+    return 'booking-event--order';
+  }
+
+  if (props.type === 'reservation') {
+    return 'booking-event--reservation';
+  }
+});
 </script>
 
 <template>
   <div
-    :class="`booking-event--${event.status.toLowerCase()}`"
+    :class="eventClass"
     :style="{
       top: topPercent + '%',
       height: heightPercent + '%',
@@ -83,6 +103,7 @@ const endHour = computed(
   font-size: 12px;
   overflow: hidden;
   color: #fff;
+  background: #7fd7cc;
 
   &__content {
     display: flex;
@@ -100,20 +121,20 @@ const endHour = computed(
     opacity: 0.8;
   }
 
-  &--new {
-    background: rgba(0, 128, 255, 0.8);
-  }
-
-  &--bill {
-    background: rgba(255, 165, 0, 0.8);
-  }
-
-  &--closed {
-    background: rgba(128, 128, 128, 0.8);
+  &--order {
+    background: #7fd7cc;
   }
 
   &--banquet {
-    background: rgba(128, 0, 128, 0.8);
+    background: #b348f7;
+  }
+
+  &--queue {
+    background: #0097fd;
+  }
+
+  &--reservation {
+    background: #ff7043;
   }
 }
 </style>

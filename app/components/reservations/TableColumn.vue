@@ -1,47 +1,42 @@
 <script lang="ts" setup>
 import BookingEvent from './BookingEvent.vue';
+import { Restaurant, Table } from '~/models/reservations';
+
+const props = defineProps<{
+  table: Table;
+  restaurant: Restaurant;
+}>();
 </script>
 
 <template>
   <div class="table-column">
     <BookingEvent
+      v-for="event in table.orders"
+      :key="event.id"
+      :closing-time="restaurant.closing_time"
       :event="{
-        id: 1,
-        status: 'New',
-        start_time: '2025-04-04T13:00:00+10:00',
-        end_time: '2025-04-04T14:00:00+10:00',
-        name_for_reservation: 'Алина',
+        start_time: event.start_time,
+        end_time: event.end_time,
+        id: event.id,
+        status: event.status,
       }"
-      closingTime="23:40"
-      openingTime="11:00"
+      :opening-time="restaurant.opening_time"
+      type="order"
     />
 
     <BookingEvent
+      v-for="event in table.reservations"
+      :key="event.id"
+      :closing-time="restaurant.closing_time"
       :event="{
-        id: 2,
-        status: 'Bill',
-        start_time: '2025-04-04T13:30:00+10:00',
-        end_time: '2025-04-04T14:30:00+10:00',
-        name_for_reservation: 'Миша',
+        start_time: event.seating_time,
+        end_time: event.end_time,
+        id: event.id,
+        status: event.status,
+        name_for_reservation: event.name_for_reservation,
       }"
-      :index="1"
-      :total="2"
-      closingTime="23:40"
-      openingTime="11:00"
-    />
-
-    <BookingEvent
-      :event="{
-        id: 3,
-        status: 'Closed',
-        start_time: '2025-04-04T13:15:00+10:00',
-        end_time: '2025-04-04T14:15:00+10:00',
-        name_for_reservation: 'Иван',
-      }"
-      :index="0"
-      :total="2"
-      closingTime="23:40"
-      openingTime="11:00"
+      :opening-time="restaurant.opening_time"
+      type="reservation"
     />
   </div>
 </template>
@@ -49,8 +44,11 @@ import BookingEvent from './BookingEvent.vue';
 <style lang="scss" scoped>
 .table-column {
   position: relative;
-  height: 600px;
-  border: 1px solid #444;
-  flex: 1;
+  border-right: 1px solid #444;
+  width: 100%;
+
+  &:last-child {
+    border-right: none;
+  }
 }
 </style>
