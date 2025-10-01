@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
 import TableColumn from '~/components/reservations/TableColumn';
-import { durationMinutes, getMinutesFromHHmm } from '~/utils/utils';
 import { useReservationsStore } from '~/store/reservations';
+import { formatMinutesToTime } from '~/utils/utils';
 
 const stepMinutes = 30;
 
@@ -15,20 +15,16 @@ const allZones = computed(() => reservationsStore.allZones);
 const selectedDay = computed(() => reservationsStore.selectedDay);
 const selectedZones = computed(() => reservationsStore.selectedZones);
 const loading = computed(() => reservationsStore.loading);
-const openMinutes = computed(() => {
-  return getMinutesFromHHmm(reservations.value.restaurant.opening_time);
-});
-const closeMinutes = computed(() => {
-  return getMinutesFromHHmm(reservations.value.restaurant.closing_time);
-});
-const totalMinutes = computed(() => {
-  return durationMinutes(openMinutes.value, closeMinutes.value);
-});
 const timeSlots = computed(() => {
   if (!reservations.value) return [];
-
   return generateTimeSlots();
 });
+const restaurantOpenMinutes = computed(
+  () => reservationsStore.restaurantOpenMinutes,
+);
+const restaurantTotalMinutes = computed(
+  () => reservationsStore.restaurantTotalMinutes,
+);
 
 onMounted(() => {
   reservationsStore.load();
@@ -36,20 +32,17 @@ onMounted(() => {
 
 function generateTimeSlots(): string[] {
   const slots: string[] = [];
-  for (let i = 0; i <= totalMinutes.value; i += stepMinutes) {
-    const minutes = (openMinutes.value + i) % (24 * 60);
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    slots.push(
-      `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`,
-    );
+  for (let i = 0; i <= restaurantTotalMinutes.value; i += stepMinutes) {
+    const minutes = (restaurantOpenMinutes.value + i) % (24 * 60);
+    const time = formatMinutesToTime(minutes);
+    slots.push(time);
   }
 
   return slots;
 }
 
 function topPercent(index: number): number {
-  return ((stepMinutes * index) / totalMinutes.value) * 100;
+  return ((stepMinutes * index) / restaurantTotalMinutes.value) * 100;
 }
 </script>
 

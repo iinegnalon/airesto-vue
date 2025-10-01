@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import type { BookingResponse, Table } from '~/models/reservations';
 import { fetchReservations } from '~/api/reservations';
 import moment from 'moment/moment';
+import { durationMinutes, getMinutesFromHHmm } from '~/utils/utils';
 
 interface ReservationsStore {
   data: BookingResponse | null;
@@ -19,14 +20,16 @@ export const useReservationsStore = defineStore('reservations', {
   }),
 
   getters: {
-    availableDays: (state): string[] => state.data?.available_days ?? [],
+    availableDays(state): string[] {
+      return state.data?.available_days ?? [];
+    },
 
-    allZones: (state): string[] => {
+    allZones(state): string[] {
       if (!state.data) return [];
       return Array.from(new Set(state.data.tables.map((t) => t.zone)));
     },
 
-    filteredTables: (state): Table[] => {
+    filteredTables(state): Table[] {
       if (!state.data) return [];
 
       let tables = state.data.tables;
@@ -56,6 +59,21 @@ export const useReservationsStore = defineStore('reservations', {
 
       return tables;
     },
+
+    restaurantOpenMinutes(state): number {
+      return getMinutesFromHHmm(state.data?.restaurant.opening_time ?? '');
+    },
+
+    restaurantCloseMinutes(state): number {
+      return getMinutesFromHHmm(state.data?.restaurant.closing_time ?? '');
+    },
+
+    restaurantTotalMinutes(): number {
+      return durationMinutes(
+        this.restaurantOpenMinutes,
+        this.restaurantCloseMinutes,
+      );
+    },
   },
 
   actions: {
@@ -65,6 +83,7 @@ export const useReservationsStore = defineStore('reservations', {
       try {
         this.data = await fetchReservations();
 
+        // Set default selected day and zones
         this.selectedDay = this.data?.current_day ?? null;
         this.selectedZones = this.data
           ? Array.from(new Set(this.data.tables.map((t) => t.zone)))

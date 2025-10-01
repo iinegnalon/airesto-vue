@@ -49,3 +49,14 @@ export interface BookingResponse {
   restaurant: Restaurant;
   tables: Table[];
 }
+
+export interface BookingEvent {
+  id: string | number;
+  status: string;
+  start_time: string;
+  end_time: string;
+  name_for_reservation?: string;
+  type: EventType;
+}
+
+export type EventType = 'order' | 'reservation';

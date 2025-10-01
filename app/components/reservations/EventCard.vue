@@ -1,0 +1,112 @@
+<script lang="ts" setup>
+import { computed } from 'vue';
+import {
+  durationMinutes,
+  formatMinutesToTime,
+  getMinutesFromISO,
+} from '~/utils/utils';
+import { BookingEvent } from '~/models/reservations';
+import { useReservationsStore } from '~/store/reservations';
+
+const props = defineProps<{
+  event: BookingEvent;
+}>();
+
+const reservationsStore = useReservationsStore();
+
+const startMinutes = getMinutesFromISO(props.event.start_time);
+const endMinutes = getMinutesFromISO(props.event.end_time);
+const eventDuration = durationMinutes(startMinutes, endMinutes);
+
+const restaurantOpenMinutes = computed(
+  () => reservationsStore.restaurantOpenMinutes,
+);
+const restaurantTotalMinutes = computed(
+  () => reservationsStore.restaurantTotalMinutes,
+);
+const topPercent = computed(
+  () =>
+    ((startMinutes - restaurantOpenMinutes.value) /
+      restaurantTotalMinutes.value) *
+    100,
+);
+const heightPercent = computed(
+  () => (eventDuration / restaurantTotalMinutes.value) * 100,
+);
+const startHour = computed(() => formatMinutesToTime(startMinutes));
+const endHour = computed(() => formatMinutesToTime(endMinutes));
+const eventClass = computed(() => {
+  const status = props.event.status.toLowerCase();
+
+  if (status === 'banquet') return 'booking-event--banquet';
+  if (status === 'живая очередь') return 'booking-event--queue';
+  if (props.event.type === 'order') return 'booking-event--order';
+  if (props.event.type === 'reservation') return 'booking-event--reservation';
+
+  return '';
+});
+</script>
+
+<template>
+  <div
+    :class="eventClass"
+    :style="{
+      top: topPercent + '%',
+      height: heightPercent + '%',
+    }"
+    class="booking-event"
+  >
+    <div class="booking-event__content">
+      <div class="booking-event__title">
+        {{ event.name_for_reservation ?? event.status }}
+      </div>
+      <div class="booking-event__time">{{ startHour }}–{{ endHour }}</div>
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.booking-event {
+  width: 100%;
+  position: absolute;
+  border-radius: 4px;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  font-size: 12px;
+  overflow: hidden;
+  color: #fff;
+  background: #7fd7cc;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  &__time {
+    font-size: 11px;
+    opacity: 0.8;
+  }
+
+  &--order {
+    background: #7fd7cc;
+  }
+
+  &--banquet {
+    background: #b348f7;
+  }
+
+  &--queue {
+    background: #0097fd;
+  }
+
+  &--reservation {
+    background: #ff7043;
+  }
+}
+</style>

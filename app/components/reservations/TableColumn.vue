@@ -1,11 +1,38 @@
 <script lang="ts" setup>
-import BookingEvent from './BookingEvent.vue';
-import { Restaurant, Table } from '~/models/reservations';
+import { computed } from 'vue';
+import EventCard from './EventCard.vue';
+import {
+  BookingEvent,
+  EventType,
+  Restaurant,
+  Table,
+} from '~/models/reservations';
 
 const props = defineProps<{
   table: Table;
   restaurant: Restaurant;
 }>();
+
+// Merged and sorted events
+const mergedEvents = computed<BookingEvent[]>(() => {
+  return [
+    ...props.table.orders.map((o) => ({
+      id: o.id,
+      start_time: o.start_time,
+      end_time: o.end_time,
+      status: o.status,
+      type: 'order' as EventType,
+    })),
+    ...props.table.reservations.map((r) => ({
+      id: r.id,
+      start_time: r.seating_time,
+      end_time: r.end_time,
+      status: r.status,
+      type: 'reservation' as EventType,
+      name_for_reservation: r.name_for_reservation,
+    })),
+  ].sort((a, b) => a.start_time.localeCompare(b.start_time));
+});
 </script>
 
 <template>
@@ -16,33 +43,12 @@ const props = defineProps<{
       <div>{{ table.zone }}</div>
     </div>
 
-    <BookingEvent
-      v-for="event in table.orders"
+    <EventCard
+      v-for="event in mergedEvents"
       :key="event.id"
       :closing-time="restaurant.closing_time"
-      :event="{
-        start_time: event.start_time,
-        end_time: event.end_time,
-        id: event.id,
-        status: event.status,
-      }"
+      :event="event"
       :opening-time="restaurant.opening_time"
-      type="order"
-    />
-
-    <BookingEvent
-      v-for="event in table.reservations"
-      :key="event.id"
-      :closing-time="restaurant.closing_time"
-      :event="{
-        start_time: event.seating_time,
-        end_time: event.end_time,
-        id: event.id,
-        status: event.status,
-        name_for_reservation: event.name_for_reservation,
-      }"
-      :opening-time="restaurant.opening_time"
-      type="reservation"
     />
   </div>
 </template>
