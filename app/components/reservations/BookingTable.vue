@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
-import TableColumn from '~/components/reservations/TableColumn';
+import TableColumn from './TableColumn.vue';
 import { useReservationsStore } from '~/store/reservations';
 import { formatMinutesToTime } from '~/utils/utils';
 

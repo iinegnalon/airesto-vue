@@ -5,7 +5,7 @@ import {
   formatMinutesToTime,
   getMinutesFromISO,
 } from '~/utils/utils';
-import { BookingEvent } from '~/models/reservations';
+import type { BookingEvent } from '~/models/reservations';
 import { useReservationsStore } from '~/store/reservations';
 
 const props = defineProps<{
@@ -53,12 +53,16 @@ const eventClass = computed(() => {
     :style="{
       top: topPercent + '%',
       height: heightPercent + '%',
+      left: `calc(${100 / event.row_count}% * ${event.row_index} + ${event.offset_index * 4}px)`,
+      width: `calc(${100 / event.row_count}% - ${event.offset_index * 4}px)`,
     }"
     class="booking-event"
   >
     <div class="booking-event__content">
       <div class="booking-event__title">
         {{ event.name_for_reservation ?? event.status }}
+        {{ event.start_min }}
+        {{ event.row_index + 1 }}/{{ event.row_count }}
       </div>
       <div class="booking-event__time">{{ startHour }}–{{ endHour }}</div>
     </div>
@@ -70,12 +74,12 @@ const eventClass = computed(() => {
   width: 100%;
   position: absolute;
   border-radius: 4px;
-  padding: 2px 4px;
+  padding: 2px 6px;
   box-sizing: border-box;
-  font-size: 12px;
+  font-size: 11px;
   overflow: hidden;
   color: #fff;
-  background: #7fd7cc;
+  border-left: 2px solid #7fd7cc;
 
   &__content {
     display: flex;
@@ -94,19 +98,23 @@ const eventClass = computed(() => {
   }
 
   &--order {
-    background: #7fd7cc;
+    background: rgba(127, 215, 204, 0.16);
+    border-color: #7fd7cc;
   }
 
   &--banquet {
-    background: #b348f7;
+    background: rgba(179, 72, 247, 0.16);
+    border-color: #b348f7;
   }
 
   &--queue {
-    background: #0097fd;
+    background: rgba(0, 151, 253, 0.16);
+    border-color: #0097fd;
   }
 
   &--reservation {
-    background: #ff7043;
+    background: rgba(255, 112, 67, 0.16);
+    border-color: #ff7043;
   }
 }
 </style>

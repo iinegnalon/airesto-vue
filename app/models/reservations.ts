@@ -50,6 +50,8 @@ export interface BookingResponse {
   tables: Table[];
 }
 
+export type EventType = 'order' | 'reservation';
+
 export interface BookingEvent {
   id: string | number;
   status: string;
@@ -57,6 +59,9 @@ export interface BookingEvent {
   end_time: string;
   name_for_reservation?: string;
   type: EventType;
+  start_min: number;
+  end_min: number;
+  offset_index: number;
+  row_index: number;
+  row_count: number;
 }
-
-export type EventType = 'order' | 'reservation';
