@@ -171,6 +171,7 @@ function copyNumber(number: string) {
     min-width: fit-content;
     min-height: fit-content;
     backdrop-filter: blur(2px);
+    white-space: nowrap;
   }
 
   &__content {

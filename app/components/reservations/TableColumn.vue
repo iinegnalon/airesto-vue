@@ -141,15 +141,18 @@ function checkOverlaps(events: BookingEvent[]) {
   }
 
   &__info {
+    position: sticky;
+    top: 0;
+    margin-top: calc(-1 * var(--table-column-info-height));
     height: var(--table-column-info-height);
-    position: absolute;
-    top: calc(-1 * var(--table-column-info-height));
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     color: rgba(255, 255, 255, 0.64);
+    z-index: 12;
+    background: #1b1b1d;
 
     .bold {
       font-weight: bold;

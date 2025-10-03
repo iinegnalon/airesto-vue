@@ -4,6 +4,7 @@ import moment from 'moment/moment';
 import TableColumn from './TableColumn.vue';
 import { useReservationsStore } from '~/store/reservations';
 import { formatMinutesToTime, getDay } from '~/utils/utils';
+import BaseLoader from '~/components/common/BaseLoader.vue';
 
 const stepMinutes = 30;
 
@@ -50,7 +51,7 @@ function topPercent(index: number): number {
 
 <template>
   <div>
-    <div v-if="loading">Loading...</div>
+    <BaseLoader v-if="loading" />
 
     <div v-else-if="reservations" class="booking-table-wrapper">
       <div class="booking-table__title">Бронирования</div>
@@ -123,16 +124,19 @@ function topPercent(index: number): number {
 
 <style lang="scss" scoped>
 .booking-table-wrapper {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .booking-table {
   display: flex;
-  width: 100%;
+  width: fit-content;
+  min-width: 100%;
   min-height: 1040px;
   position: relative;
   margin-top: var(--table-column-info-height);
   margin-bottom: 20px;
+  padding-right: 2rem;
 
   &__title {
     font-size: 28px;
@@ -141,7 +145,7 @@ function topPercent(index: number): number {
   }
 
   &__filters {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 32px;
@@ -183,18 +187,27 @@ function topPercent(index: number): number {
     }
   }
 
+  &__title,
+  &__filters {
+    width: fit-content;
+    position: sticky;
+    left: 2rem;
+  }
+
   &__hours {
-    position: relative;
+    position: sticky;
+    left: 0;
     display: flex;
     flex-direction: column;
-    width: 60px;
+    width: var(--table-column-time-width);
     flex-shrink: 0;
+    z-index: 10;
   }
 
   &__hour {
     position: absolute;
     font-size: 12px;
-    color: #666;
+    color: rgba(255, 255, 255, 0.48);
     padding-right: 8px;
     text-align: right;
     width: 100%;
@@ -202,12 +215,8 @@ function topPercent(index: number): number {
 
   &__divider {
     position: absolute;
-    font-size: 12px;
-    color: #666;
-    padding-right: 8px;
-    text-align: right;
     border-top: 1px solid #444;
-    width: calc(100% - 60px);
+    width: calc(100% - var(--table-column-time-width) - 2rem);
     transform: translateX(60px);
   }
 }
