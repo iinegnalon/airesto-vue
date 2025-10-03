@@ -132,7 +132,7 @@ function checkOverlaps(events: BookingEvent[]) {
 <style lang="scss" scoped>
 .table-column {
   position: relative;
-  border-right: 1px solid #444;
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
   width: 100%;
   min-width: 80px;
 

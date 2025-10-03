@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import moment from 'moment/moment';
+import momentTimezone from 'moment-timezone';
 import TableColumn from './TableColumn.vue';
 import { useReservationsStore } from '~/store/reservations';
 import { formatMinutesToTime, getDay } from '~/utils/utils';
@@ -9,6 +10,10 @@ import BaseLoader from '~/components/common/BaseLoader.vue';
 const stepMinutes = 30;
 
 const reservationsStore = useReservationsStore();
+
+let timer: number | undefined;
+
+const currentTimePercent = ref<number | null>(null);
 
 const reservations = computed(() => reservationsStore.data);
 const filteredTables = computed(() => reservationsStore.filteredTables);
@@ -31,6 +36,17 @@ const restaurantTotalMinutes = computed(
 
 onMounted(() => {
   reservationsStore.load();
+
+  // Synchronize time every 15 seconds
+  timer = window.setInterval(updateCurrentTime, 15 * 1000);
+});
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer);
+});
+
+watch(reservations, () => {
+  updateCurrentTime();
 });
 
 function generateTimeSlots(): string[] {
@@ -46,6 +62,24 @@ function generateTimeSlots(): string[] {
 
 function topPercent(index: number): number {
   return ((stepMinutes * index) / restaurantTotalMinutes.value) * 100;
+}
+
+function updateCurrentTime() {
+  if (!reservations.value) return;
+
+  const tz = reservations.value.restaurant.timezone;
+  const now = momentTimezone().tz(tz);
+  const nowMinutes = now.hours() * 60 + now.minutes();
+
+  const percent =
+    ((nowMinutes - restaurantOpenMinutes.value) /
+      restaurantTotalMinutes.value) *
+    100;
+
+  currentTimePercent.value = null;
+  if (percent >= 0 && percent <= 100) {
+    currentTimePercent.value = percent;
+  }
 }
 </script>
 
@@ -85,6 +119,12 @@ function topPercent(index: number): number {
       </div>
 
       <div class="booking-table">
+        <div
+          v-if="currentTimePercent !== null"
+          :style="{ top: currentTimePercent + '%' }"
+          class="booking-table__current-time"
+        />
+
         <div class="booking-table__dividers">
           <div
             v-for="(_, index) in timeSlots"
@@ -213,11 +253,16 @@ function topPercent(index: number): number {
     width: 100%;
   }
 
-  &__divider {
+  &__divider,
+  &__current-time {
     position: absolute;
-    border-top: 1px solid #444;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
     width: calc(100% - var(--table-column-time-width) - 2rem);
-    transform: translateX(60px);
+    transform: translateX(var(--table-column-time-width));
+  }
+
+  &__current-time {
+    border-color: #ff7043;
   }
 }
 </style>

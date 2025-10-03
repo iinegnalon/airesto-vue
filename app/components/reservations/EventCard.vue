@@ -145,7 +145,7 @@ function copyNumber(number: string) {
           @click="copyNumber(event.phone_number)"
         >
           <IconPhone />
-          {{ event.phone_number.slice(-4) }}
+          {{ event.phone_number }}
         </div>
         <div class="booking-event__time">{{ startHour }}–{{ endHour }}</div>
       </template>
