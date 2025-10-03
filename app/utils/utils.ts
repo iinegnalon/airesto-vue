@@ -1,4 +1,5 @@
-import moment from 'moment';
+import moment from 'moment/moment';
+import 'moment/locale/ru';
 
 export function getMinutesFromHHmm(time: string): number {
   const [hStr, mStr] = time.split(':');
@@ -26,4 +27,16 @@ export function formatMinutesToTime(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
   return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+}
+
+export function getDay(date: string, currentDate: string): string {
+  const inputDate = moment(date).startOf('day');
+  const current = moment(currentDate).startOf('day');
+
+  const diffDays = inputDate.diff(current, 'days');
+
+  if (diffDays === 0) return 'сегодня';
+  if (diffDays === 1) return 'завтра';
+
+  return moment(date).locale('ru').format('dddd');
 }

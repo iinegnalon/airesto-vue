@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
+import moment from 'moment/moment';
 import TableColumn from './TableColumn.vue';
 import { useReservationsStore } from '~/store/reservations';
-import { formatMinutesToTime } from '~/utils/utils';
+import { formatMinutesToTime, getDay } from '~/utils/utils';
 
 const stepMinutes = 30;
 
@@ -15,6 +16,7 @@ const allZones = computed(() => reservationsStore.allZones);
 const selectedDay = computed(() => reservationsStore.selectedDay);
 const selectedZones = computed(() => reservationsStore.selectedZones);
 const loading = computed(() => reservationsStore.loading);
+const currentDay = computed(() => reservationsStore.data?.current_day ?? '');
 const timeSlots = computed(() => {
   if (!reservations.value) return [];
   return generateTimeSlots();
@@ -62,7 +64,10 @@ function topPercent(index: number): number {
             class="filter-button"
             @click="reservationsStore.setDay(date)"
           >
-            {{ date }}
+            <span class="bold">
+              {{ moment(date).locale('ru').format('D MMMM') }}
+            </span>
+            <span>{{ getDay(date, currentDay) }}</span>
           </button>
         </div>
         <div class="booking-table__filters-zone">
@@ -121,26 +126,6 @@ function topPercent(index: number): number {
   padding: 20px;
 }
 
-.booking-table__title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.booking-table__filters {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-
-  &-date,
-  &-zone {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-}
-
 .booking-table {
   display: flex;
   width: 100%;
@@ -148,6 +133,55 @@ function topPercent(index: number): number {
   position: relative;
   margin-top: var(--table-column-info-height);
   margin-bottom: 20px;
+
+  &__title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  &__filters {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+
+    &-date,
+    &-zone {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-button {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+
+      &.active {
+        background-color: #007aff;
+
+        &:hover {
+          background-color: rgba(0, 122, 255, 0.8);
+        }
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+    }
+
+    &-zone .filter-button {
+      padding: 4px 6px;
+      line-height: 16px;
+      background-color: rgba(255, 255, 255, 0.08);
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.12);
+      }
+    }
+  }
 
   &__hours {
     position: relative;

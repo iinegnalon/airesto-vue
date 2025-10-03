@@ -7,6 +7,7 @@ import type {
   Restaurant,
   Table,
 } from '~/models/reservations';
+import { getMinutesFromISO } from '~/utils/utils';
 
 const props = defineProps<{
   table: Table;
@@ -51,6 +52,8 @@ function mergeEvents(table: Table): BookingEvent[] {
       name_for_reservation: r.name_for_reservation,
       start_min: getMinutesFromISO(r.seating_time),
       end_min: getMinutesFromISO(r.end_time),
+      num_people: r.num_people,
+      phone_number: r.phone_number,
       offset_index: 0,
       row_index: 0,
       row_count: 1,
@@ -107,8 +110,12 @@ function checkOverlaps(events: BookingEvent[]) {
 <template>
   <div class="table-column">
     <div class="table-column__info">
-      <div>#{{ table.number }}</div>
-      <div>{{ table.capacity }} чел</div>
+      <div>
+        <span>
+          #<span class="bold">{{ table.number }}&nbsp;</span>
+        </span>
+        <span>{{ table.capacity }} чел</span>
+      </div>
       <div>{{ table.zone }}</div>
     </div>
 
@@ -138,11 +145,16 @@ function checkOverlaps(events: BookingEvent[]) {
     position: absolute;
     top: calc(-1 * var(--table-column-info-height));
     display: flex;
-    gap: 4px;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-    flex-wrap: wrap;
+    color: rgba(255, 255, 255, 0.64);
+
+    .bold {
+      font-weight: bold;
+      color: white;
+    }
   }
 }
 </style>

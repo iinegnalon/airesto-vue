@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
+import moment from 'moment/moment';
 import type { BookingResponse, Table } from '~/models/reservations';
 import { fetchReservations } from '~/api/reservations';
-import moment from 'moment/moment';
 import { durationMinutes, getMinutesFromHHmm } from '~/utils/utils';
 
 interface ReservationsStore {

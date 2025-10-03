@@ -10,7 +10,6 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: #1B1B1D;
   color: white;
 }
@@ -66,20 +65,20 @@ button {
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.04);
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-size: 11px;
+  line-height: 14px;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.08);
   }
 
-  &.active {
-    background-color: #007AFF;
 
-    &:hover {
-      background-color: rgba(0, 122, 255, 0.8);
-    }
+  span {
+    font-size: inherit;
+    font-weight: inherit;
   }
 }
 

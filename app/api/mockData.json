@@ -83,15 +83,15 @@
           "num_people": 4,
           "phone_number": "+79999999999",
           "status": "Новая",
-          "seating_time": "2025-04-04T16:40:47.885000+10:00",
-          "end_time": "2025-04-04T17:50:41.598000+10:00"
+          "seating_time": "2025-04-04T16:50:47.885000+10:00",
+          "end_time": "2025-04-04T18:10:41.598000+10:00"
         }
       ]
     },
     {
       "id": "ac122de1-9c5c-4a04-bef7-d52e4c207a3d",
       "capacity": 6,
-      "number": "21",
+      "number": "52",
       "zone": "1 этаж",
       "orders": [
         {
@@ -125,7 +125,7 @@
     {
       "id": "20de29e0-5cc2-42a3-99f3-f9e3cb49e857",
       "capacity": 2,
-      "number": "31",
+      "number": "53",
       "zone": "2 этаж",
       "orders": [
         {
@@ -169,7 +169,7 @@
           "num_people": 2,
           "phone_number": "+79994444444",
           "status": "Открыт",
-          "seating_time": "2025-04-04T12:45:00+10:00",
+          "seating_time": "2025-04-04T12:55:00+10:00",
           "end_time": "2025-04-04T14:00:00+10:00"
         },
         {
@@ -178,7 +178,7 @@
           "num_people": 2,
           "phone_number": "+79994444444",
           "status": "Открыт",
-          "seating_time": "2025-04-04T14:10:00+10:00",
+          "seating_time": "2025-04-04T14:20:00+10:00",
           "end_time": "2025-04-04T15:50:00+10:00"
         }
       ]
@@ -186,7 +186,7 @@
     {
       "id": "09b4a2cb-d2f7-4a15-a17a-9d7e307a8e7c",
       "capacity": 8,
-      "number": "41",
+      "number": "54",
       "zone": "Банкетный зал",
       "orders": [
         {
@@ -221,9 +221,9 @@
       ]
     },
     {
-      "id": "3cbe017d-4446-4a69-9a71-1e162ebf38c1",
+      "id": "3cbe017d-4446-4a69-9a71-1e162ebf38d1",
       "capacity": 4,
-      "number": "53",
+      "number": "55",
       "zone": "2 этаж",
       "orders": [
         {
@@ -287,7 +287,7 @@
     {
       "id": "3cbe017d-4446-4a69-9a71-1e162ebf38c1",
       "capacity": 4,
-      "number": "52",
+      "number": "56",
       "zone": "2 этаж",
       "orders": [
         {
@@ -345,7 +345,37 @@
     {
       "id": "3cbe017d-4446-4a69-9a71-1e162ebf38c2",
       "capacity": 4,
-      "number": "54",
+      "number": "57",
+      "zone": "2 этаж",
+      "orders": [
+      ],
+      "reservations": [
+      ]
+    },
+    {
+      "id": "3cbe017d-4446-4a69-9a71-1e162ebf38c3",
+      "capacity": 2,
+      "number": "58",
+      "zone": "1 этаж",
+      "orders": [
+      ],
+      "reservations": [
+      ]
+    },
+    {
+      "id": "3cbe017d-4446-4a69-9a71-1e162ebf38c4",
+      "capacity": 10,
+      "number": "59",
+      "zone": "Банкетный зал",
+      "orders": [
+      ],
+      "reservations": [
+      ]
+    },
+    {
+      "id": "3cbe017d-4446-4a69-9a71-1e162ebf38c5",
+      "capacity": 5,
+      "number": "60",
       "zone": "2 этаж",
       "orders": [
       ],

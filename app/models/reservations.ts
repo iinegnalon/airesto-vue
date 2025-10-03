@@ -61,6 +61,8 @@ export interface BookingEvent {
   type: EventType;
   start_min: number;
   end_min: number;
+  num_people?: number;
+  phone_number?: string;
   offset_index: number;
   row_index: number;
   row_count: number;
