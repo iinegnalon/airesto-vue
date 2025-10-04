@@ -155,7 +155,7 @@ function checkOverlaps(events: BookingEvent[]) {
 
   &__info {
     position: sticky;
-    top: 0;
+    top: var(--header-height);
     margin-top: calc(-1 * var(--table-column-info-height));
     height: var(--table-column-info-height);
     display: flex;

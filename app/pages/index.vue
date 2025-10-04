@@ -8,4 +8,8 @@ import BookingTable from '~/components/reservations/BookingTable.vue';
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.reservations-page {
+  padding-top: 32px;
+}
+</style>
