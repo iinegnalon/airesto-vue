@@ -9,6 +9,7 @@ interface ReservationsStore {
   loading: boolean;
   selectedDay: string | null;
   selectedZones: string[];
+  scale: number;
 }
 
 export const useReservationsStore = defineStore('reservations', {
@@ -17,6 +18,7 @@ export const useReservationsStore = defineStore('reservations', {
     loading: true,
     selectedDay: null,
     selectedZones: [],
+    scale: 10,
   }),
 
   getters: {
@@ -81,6 +83,8 @@ export const useReservationsStore = defineStore('reservations', {
       this.loading = true;
 
       try {
+        this.scale = Number(localStorage.getItem('tableScale')) || 10;
+
         this.data = await fetchReservations();
 
         // Set default selected day and zones
@@ -106,6 +110,15 @@ export const useReservationsStore = defineStore('reservations', {
       }
 
       this.selectedZones.push(zone);
+    },
+
+    setScale(value: number) {
+      this.scale = Math.max(1, Math.min(value, 20)); // Scale from 1 to 20
+      localStorage.setItem('tableScale', String(this.scale));
+    },
+
+    addScale(value: number) {
+      this.setScale(this.scale + value);
     },
   },
 });

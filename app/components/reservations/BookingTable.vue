@@ -3,11 +3,14 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import moment from 'moment/moment';
 import momentTimezone from 'moment-timezone';
 import TableColumn from './TableColumn.vue';
+import TableScaleController from './TableScaleController.vue';
 import { useReservationsStore } from '~/store/reservations';
 import { formatMinutesToTime, getDay } from '~/utils/utils';
 import BaseLoader from '~/components/common/BaseLoader.vue';
 
 const stepMinutes = 30;
+const baseCellHeight = 16;
+const scaleY = 4;
 
 const reservationsStore = useReservationsStore();
 
@@ -27,12 +30,21 @@ const timeSlots = computed(() => {
   if (!reservations.value) return [];
   return generateTimeSlots();
 });
+// Restaurant opening time in minutes from midnight (11:00 = 660)
 const restaurantOpenMinutes = computed(
   () => reservationsStore.restaurantOpenMinutes,
 );
+// Total duration the restaurant is open in minutes (11:00-23:40 = 760)
 const restaurantTotalMinutes = computed(
   () => reservationsStore.restaurantTotalMinutes,
 );
+// Calculate table height with scale
+const tableHeight = computed(() => {
+  return (
+    (restaurantTotalMinutes.value / stepMinutes) *
+    (baseCellHeight + reservationsStore.scale * scaleY)
+  );
+});
 
 onMounted(() => {
   reservationsStore.load();
@@ -118,7 +130,12 @@ function updateCurrentTime() {
         </div>
       </div>
 
-      <div class="booking-table">
+      <div
+        :style="{
+          height: `${tableHeight}px`,
+        }"
+        class="booking-table"
+      >
         <div
           v-if="currentTimePercent !== null"
           :style="{ top: currentTimePercent + '%' }"
@@ -156,6 +173,8 @@ function updateCurrentTime() {
           :table="table"
         />
       </div>
+
+      <TableScaleController />
     </div>
 
     <div v-else>No reservations</div>
@@ -171,8 +190,6 @@ function updateCurrentTime() {
 .booking-table {
   display: flex;
   width: fit-content;
-  min-width: 100%;
-  min-height: 1040px;
   position: relative;
   margin-top: var(--table-column-info-height);
   margin-bottom: 20px;

@@ -8,11 +8,17 @@ import type {
   Table,
 } from '~/models/reservations';
 import { getMinutesFromISO } from '~/utils/utils';
+import { useReservationsStore } from '~/store/reservations';
 
 const props = defineProps<{
   table: Table;
   restaurant: Restaurant;
 }>();
+
+const baseCellWidth = 32;
+const scaleX = 16;
+
+const reservationsStore = useReservationsStore();
 
 const mergedEvents = computed<BookingEvent[]>(() => {
   // Merged and sorted events
@@ -27,6 +33,10 @@ const mergedEvents = computed<BookingEvent[]>(() => {
   checkOverlaps(events);
 
   return events;
+});
+// Calculate column width with scale
+const columnWidth = computed(() => {
+  return baseCellWidth + reservationsStore.scale * scaleX;
 });
 
 function mergeEvents(table: Table): BookingEvent[] {
@@ -108,7 +118,12 @@ function checkOverlaps(events: BookingEvent[]) {
 </script>
 
 <template>
-  <div class="table-column">
+  <div
+    :style="{
+      width: `${columnWidth}px`,
+    }"
+    class="table-column"
+  >
     <div class="table-column__info">
       <div>
         <span>
@@ -133,8 +148,6 @@ function checkOverlaps(events: BookingEvent[]) {
 .table-column {
   position: relative;
   border-right: 1px solid rgba(255, 255, 255, 0.16);
-  width: 100%;
-  min-width: 80px;
 
   &:last-child {
     border-right: none;
