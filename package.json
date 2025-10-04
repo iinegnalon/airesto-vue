@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "airesto-vue",
   "type": "module",
   "private": true,
   "scripts": {
@@ -29,9 +29,6 @@
     "eslint-plugin-vue": "^9.33.0",
     "nuxt": "^4.1.2",
     "prettier": "^3.2.4",
-    "sass": "^1.89.2",
-    "vue": "^3.5.17",
-    "vue-eslint-parser": "^10.2.0",
-    "vue-router": "^4.5.1"
+    "vue-eslint-parser": "^10.2.0"
   }
 }
