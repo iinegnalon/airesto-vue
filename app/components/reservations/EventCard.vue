@@ -161,8 +161,8 @@ function copyNumber(number: string) {
   padding: 2px 6px;
   box-sizing: border-box;
   overflow: hidden;
-  color: #fff;
-  border-left: 2px solid #7fd7cc;
+  color: var(--text);
+  border-left: 2px solid var(--green);
   backdrop-filter: none;
   transition: all 0.2s ease;
 
@@ -196,29 +196,30 @@ function copyNumber(number: string) {
 
   &__status {
     padding: 2px;
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--white-12);
     border-radius: 4px;
     width: fit-content;
     font-weight: 600;
     font-size: 8px;
     line-height: 8px;
     white-space: nowrap;
+    color: white;
 
     &--bill {
-      background: rgba(74, 201, 155, 0.32);
+      background: var(--dark-green-32);
     }
 
     &--new {
-      background: #007aff;
+      background: var(--accent);
     }
 
     &--application {
-      background: rgba(0, 151, 253, 0.1);
-      color: #0097fd;
+      background: var(--blue-10);
+      color: var(--blue);
     }
 
     &--open {
-      background: rgba(74, 201, 155, 0.32);
+      background: var(--dark-green-32);
     }
   }
 
@@ -227,26 +228,30 @@ function copyNumber(number: string) {
     align-items: center;
     width: fit-content;
     cursor: pointer;
+
+    .icon-phone {
+      color: var(--text);
+    }
   }
 
   &--order {
-    background: rgba(127, 215, 204, 0.16);
-    border-color: #7fd7cc;
+    background: var(--green-16);
+    border-color: var(--green);
   }
 
   &--banquet {
-    background: rgba(179, 72, 247, 0.16);
-    border-color: #b348f7;
+    background: var(--purple-16);
+    border-color: var(--purple);
   }
 
   &--queue {
-    background: rgba(0, 151, 253, 0.16);
-    border-color: #0097fd;
+    background: var(--blue-16);
+    border-color: var(--blue);
   }
 
   &--reservation {
-    background: rgba(255, 112, 67, 0.16);
-    border-color: #ff7043;
+    background: var(--red-16);
+    border-color: var(--red);
   }
 }
 </style>

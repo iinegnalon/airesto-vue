@@ -1,0 +1,40 @@
+:root {
+  --accent: #007aff;
+  --accent-80: rgba(0, 122, 255, 0.8);
+  --red: #ff7043;
+  --red-16: rgba(255, 112, 67, 0.16);
+  --green: #7fd7cc;
+  --green-16: rgba(127, 215, 204, 0.16);
+  --dark-green: #4ac99b;
+  --dark-green-32: rgba(74, 201, 155, 0.32);
+  --purple: #b348f7;
+  --purple-16: rgba(179, 72, 247, 0.16);
+  --blue: #0097fd;
+  --blue-10: rgba(0, 151, 253, 0.1);
+  --blue-16: rgba(0, 151, 253, 0.16);
+
+  /* Dark */
+  --bg: #1b1b1d;
+  --text: #ffffff;
+  --muted-text: rgba(255, 255, 255, 0.64);
+  --surface: #222222;
+  --surface-2: #2d2d2f;
+  --white-4: rgba(255, 255, 255, 0.04);
+  --white-8: rgba(255, 255, 255, 0.08);
+  --white-12: rgba(255, 255, 255, 0.12);
+  --divider: rgba(255, 255, 255, 0.16);
+}
+
+/* Light */
+[data-theme='light'] {
+  --bg: #eaeaea;
+  --text: #111213;
+  --muted-text: rgba(0, 0, 0, 0.6);
+  --surface: #dadada;
+  --surface-2: #e0e0e0;
+  --white-4: rgba(0, 0, 0, 0.32);
+  --white-8: rgba(0, 0, 0, 0.36);
+  --white-12: rgba(0, 0, 0, 0.4);
+  --divider: rgba(0, 0, 0, 0.12);
+}
+

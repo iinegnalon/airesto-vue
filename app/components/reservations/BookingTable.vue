@@ -185,6 +185,7 @@ function updateCurrentTime() {
 .booking-table-wrapper {
   display: flex;
   flex-direction: column;
+  width: fit-content;
 }
 
 .booking-table {
@@ -221,10 +222,10 @@ function updateCurrentTime() {
       text-align: left;
 
       &.active {
-        background-color: #007aff;
+        background-color: var(--accent);
 
         &:hover {
-          background-color: rgba(0, 122, 255, 0.8);
+          background-color: var(--accent-80);
         }
       }
 
@@ -236,10 +237,10 @@ function updateCurrentTime() {
     &-zone .filter-button {
       padding: 4px 6px;
       line-height: 16px;
-      background-color: rgba(255, 255, 255, 0.08);
+      background-color: var(--white-4);
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.12);
+        background-color: var(--white-12);
       }
     }
   }
@@ -264,7 +265,7 @@ function updateCurrentTime() {
   &__hour {
     position: absolute;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.48);
+    color: var(--muted-text);
     padding-right: 8px;
     text-align: right;
     width: 100%;
@@ -273,13 +274,13 @@ function updateCurrentTime() {
   &__divider,
   &__current-time {
     position: absolute;
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    border-top: 1px solid var(--divider);
     width: calc(100% - var(--table-column-time-width) - 2rem);
     transform: translateX(var(--table-column-time-width));
   }
 
   &__current-time {
-    border-color: #ff7043;
+    border-color: var(--warning);
   }
 }
 </style>

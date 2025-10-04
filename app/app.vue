@@ -1,4 +1,13 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { onMounted } from 'vue';
+import { useInterfaceStore } from '~/store/interface';
+
+const themeStore = useInterfaceStore();
+
+onMounted(() => {
+  themeStore.initTheme();
+});
+</script>
 
 <template>
   <div>

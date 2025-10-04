@@ -19,11 +19,11 @@ const reservationsStore = useReservationsStore();
   position: fixed;
   right: 16px;
   bottom: 16px;
-  background: #222222;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: var(--surface);
+  border: 1px solid var(--divider);
   border-radius: 8px;
   padding: 8px 14px;
-  color: white;
+  color: var(--text);
   z-index: 50;
 
   &__title {
@@ -41,10 +41,10 @@ const reservationsStore = useReservationsStore();
     user-select: none;
 
     button {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--white-4);
       border: none;
       color: white;
-      font-size: 16px;
+      font-size: 14px;
       width: 24px;
       height: 24px;
       border-radius: 4px;
@@ -52,7 +52,7 @@ const reservationsStore = useReservationsStore();
       transition: background 0.2s;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.16);
+        background: var(--white-8);
       }
     }
   }

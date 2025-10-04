@@ -2,11 +2,13 @@
 import IconLogout from '~/components/icons/IconLogout.vue';
 import IconSun from '~/components/icons/IconSun.vue';
 import { useReservationsStore } from '~/store/reservations';
+import { useInterfaceStore } from '~/store/interface';
 
 const reservationsStore = useReservationsStore();
+const interfaceStore = useInterfaceStore();
 
 function changeTheme() {
-  console.log('Change theme');
+  interfaceStore.toggleTheme();
 }
 
 function logout() {
@@ -38,8 +40,8 @@ function logout() {
 
 <style lang="scss" scoped>
 .app-header {
-  background: #2d2d2f;
-  color: white;
+  background: var(--surface-2);
+  color: var(--text);
   padding: 15px 20px;
   display: flex;
   justify-content: space-between;
@@ -64,10 +66,10 @@ function logout() {
       align-items: center;
       justify-content: center;
       height: 24px;
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--white-4);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.16);
+        background: var(--white-8);
       }
     }
   }

@@ -5,8 +5,8 @@
 <style lang="scss" scoped>
 .loader {
   margin: 2rem auto;
-  border: 4px solid white;
-  border-top: 4px solid rgba(255, 255, 255, 0.12);
+  border: 4px solid var(--text);
+  border-top: 4px solid var(--white-12);
   border-radius: 50%;
   width: 36px;
   height: 36px;
