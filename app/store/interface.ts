@@ -4,11 +4,13 @@ type Theme = 'dark' | 'light';
 
 interface InterfaceStore {
   theme: Theme;
+  scrollOff: boolean;
 }
 
 export const useInterfaceStore = defineStore('interface', {
   state: (): InterfaceStore => ({
     theme: 'dark',
+    scrollOff: false,
   }),
 
   actions: {
@@ -30,6 +32,14 @@ export const useInterfaceStore = defineStore('interface', {
 
     toggleTheme() {
       this.setTheme(this.theme === 'dark' ? 'light' : 'dark');
+    },
+
+    disableBodyScroll() {
+      this.scrollOff = true;
+    },
+
+    enableBodyScroll() {
+      this.scrollOff = false;
     },
   },
 });

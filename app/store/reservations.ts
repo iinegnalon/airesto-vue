@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import moment from 'moment/moment';
+import { useInterfaceStore } from '~/store/interface';
 import type { BookingResponse, Table } from '~/models/reservations';
 import { fetchReservations } from '~/api/reservations';
 import { durationMinutes, getMinutesFromHHmm } from '~/utils/utils';
@@ -10,6 +11,7 @@ interface ReservationsStore {
   selectedDay: string | null;
   selectedZones: string[];
   scale: number;
+  searchOpen: boolean;
 }
 
 export const useReservationsStore = defineStore('reservations', {
@@ -19,6 +21,7 @@ export const useReservationsStore = defineStore('reservations', {
     selectedDay: null,
     selectedZones: [],
     scale: 10,
+    searchOpen: false,
   }),
 
   getters: {
@@ -119,6 +122,18 @@ export const useReservationsStore = defineStore('reservations', {
 
     addScale(value: number) {
       this.setScale(this.scale + value);
+    },
+
+    openSearch() {
+      this.searchOpen = true;
+      const interfaceStore = useInterfaceStore();
+      interfaceStore.disableBodyScroll();
+    },
+
+    closeSearch() {
+      this.searchOpen = false;
+      const interfaceStore = useInterfaceStore();
+      interfaceStore.enableBodyScroll();
     },
   },
 });

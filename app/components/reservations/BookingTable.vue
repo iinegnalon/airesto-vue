@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import moment from 'moment/moment';
 import momentTimezone from 'moment-timezone';
+import SearchDialog from './SearchDialog.vue';
 import TableColumn from './TableColumn.vue';
 import TableScaleController from './TableScaleController.vue';
 import { useReservationsStore } from '~/store/reservations';
@@ -175,6 +176,7 @@ function updateCurrentTime() {
       </div>
 
       <TableScaleController />
+      <SearchDialog />
     </div>
 
     <div v-else>No reservations</div>
@@ -280,7 +282,7 @@ function updateCurrentTime() {
   }
 
   &__current-time {
-    border-color: var(--warning);
+    border-color: var(--red);
   }
 }
 </style>

@@ -2,10 +2,10 @@
 import { onMounted } from 'vue';
 import { useInterfaceStore } from '~/store/interface';
 
-const themeStore = useInterfaceStore();
+const interfaceStore = useInterfaceStore();
 
 onMounted(() => {
-  themeStore.initTheme();
+  interfaceStore.initTheme();
 });
 </script>
 
@@ -19,7 +19,7 @@ onMounted(() => {
         name="viewport"
       />
     </Head>
-    <Body>
+    <Body :class="{ 'scroll-off': interfaceStore.scrollOff }">
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
