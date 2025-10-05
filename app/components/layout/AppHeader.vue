@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted } from 'vue';
 import IconLogout from '~/components/icons/IconLogout.vue';
+import IconSearch from '~/components/icons/IconSearch.vue';
 import IconSun from '~/components/icons/IconSun.vue';
 import { useReservationsStore } from '~/store/reservations';
 import { useInterfaceStore } from '~/store/interface';
@@ -47,6 +48,7 @@ function logout() {
         class="app-header__search-btn"
         @click="reservationsStore.openSearch()"
       >
+        <IconSearch />
         ⌘+Л Поиск по имени
       </button>
       <button class="app-header__theme-btn" @click="changeTheme">
@@ -107,6 +109,11 @@ function logout() {
 
         &:hover {
           background: var(--surface-2);
+        }
+
+        .icon-search {
+          margin-right: 8px;
+          color: var(--white-48);
         }
       }
 
