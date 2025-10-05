@@ -52,6 +52,8 @@ function mergeEvents(table: Table): BookingEvent[] {
       offset_index: 0,
       row_index: 0,
       row_count: 1,
+      cover_from_min: null,
+      cover_ratio: 0,
     })),
     ...table.reservations.map((r) => ({
       id: r.id,
@@ -67,6 +69,8 @@ function mergeEvents(table: Table): BookingEvent[] {
       offset_index: 0,
       row_index: 0,
       row_count: 1,
+      cover_from_min: null,
+      cover_ratio: 0,
     })),
   ].sort((a, b) => a.start_min - b.start_min);
 }
@@ -98,8 +102,9 @@ function checkIntersections(events: BookingEvent[]) {
 
 function checkOverlaps(events: BookingEvent[]) {
   for (let i = 0; i < events.length; i++) {
+    const iEvent = events[i]!;
+
     for (let j = 0; j < i; j++) {
-      const iEvent = events[i]!;
       const jEvent = events[j]!;
 
       if (
@@ -111,7 +116,29 @@ function checkOverlaps(events: BookingEvent[]) {
           iEvent.offset_index,
           jEvent.offset_index + 1,
         );
+
+        if (jEvent.cover_from_min) {
+          jEvent.cover_from_min = Math.min(
+            jEvent.cover_from_min,
+            iEvent.start_min,
+          );
+        } else {
+          jEvent.cover_from_min = iEvent.start_min;
+        }
       }
+    }
+  }
+
+  // Calculate percent of covered space by other event
+  for (const ev of events) {
+    if (ev.cover_from_min !== null && ev.cover_from_min < ev.end_min) {
+      const total = ev.end_min - ev.start_min;
+      const covered = ev.end_min - ev.cover_from_min;
+
+      ev.cover_ratio =
+        total > 0 ? Math.max(0, Math.min(1, covered / total)) : 0;
+    } else {
+      ev.cover_ratio = 0;
     }
   }
 }

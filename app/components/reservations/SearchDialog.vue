@@ -139,6 +139,7 @@ function formatDate(iso: string) {
   &__box {
     background: var(--surface-2);
     padding: 16px;
+    margin: 16px;
     border-radius: 12px;
     width: 420px;
     max-height: 70vh;
@@ -175,16 +176,16 @@ function formatDate(iso: string) {
     cursor: pointer;
     transition: background 0.15s;
 
-    @media (prefers-color-scheme: light) {
+    [data-theme='light'] & {
       background: var(--bg);
+
+      &:hover {
+        background: var(--surface);
+      }
     }
 
     &:hover {
       background: var(--white-12);
-
-      @media (prefers-color-scheme: light) {
-        background: var(--surface);
-      }
     }
 
     &-name {

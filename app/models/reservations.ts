@@ -66,4 +66,6 @@ export interface BookingEvent {
   offset_index: number;
   row_index: number;
   row_count: number;
+  cover_from_min?: number;
+  cover_ratio: number;
 }

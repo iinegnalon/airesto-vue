@@ -68,6 +68,7 @@ function logout() {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 4px;
   z-index: 100;
   position: fixed;
   width: 100%;

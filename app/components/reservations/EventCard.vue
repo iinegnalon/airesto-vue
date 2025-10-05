@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import {
   durationMinutes,
   formatMinutesToTime,
@@ -20,6 +20,8 @@ const endMinutes = getMinutesFromISO(props.event.end_time);
 const eventDuration = durationMinutes(startMinutes, endMinutes);
 
 const hovered = ref(false);
+const contentRef = ref<HTMLElement | null>(null);
+const isOverflowing = ref(false);
 
 const restaurantOpenMinutes = computed(
   () => reservationsStore.restaurantOpenMinutes,
@@ -93,9 +95,41 @@ const displayStatus = computed(() => {
 
   return props.event.status;
 });
+const clipPct = computed(() => (props.event.cover_ratio ?? 0) * 100);
+const hasClip = computed(() => clipPct.value > 0.0001);
+const contentHeight = computed(() => {
+  if (hovered.value) return 'fit-content';
+
+  let offset = 0;
+  if (hasClip.value && isOverflowing.value) {
+    offset = 6;
+  }
+
+  return `calc(100% - ${clipPct.value}% - ${offset}px)`;
+});
+
+onMounted(() => {
+  checkOverflow();
+});
+
+// Check overflow on scale change
+watch(
+  () => reservationsStore.scale,
+  async () => {
+    await nextTick();
+    checkOverflow();
+  },
+);
 
 function copyNumber(number: string) {
   navigator.clipboard.writeText(number);
+}
+
+function checkOverflow() {
+  const el = contentRef.value;
+  if (!el) return;
+
+  isOverflowing.value = el.scrollHeight > el.clientHeight;
 }
 </script>
 
@@ -111,6 +145,11 @@ function copyNumber(number: string) {
     class="booking-event"
   >
     <div
+      ref="contentRef"
+      :class="{ hovered }"
+      :style="{
+        height: contentHeight,
+      }"
       class="booking-event__content"
       @mouseenter="hovered = true"
       @mouseleave="hovered = false"
@@ -150,6 +189,15 @@ function copyNumber(number: string) {
         <div class="booking-event__time">{{ startHour }}–{{ endHour }}</div>
       </template>
     </div>
+
+    <div
+      v-if="hasClip && isOverflowing && !hovered"
+      :style="{ bottom: `${clipPct}%` }"
+      class="booking-event__dots"
+      @mouseenter="hovered = true"
+    >
+      ...
+    </div>
   </div>
 </template>
 
@@ -158,15 +206,13 @@ function copyNumber(number: string) {
   width: 100%;
   position: absolute;
   border-radius: 4px;
-  padding: 2px 6px;
   box-sizing: border-box;
   overflow: hidden;
   color: var(--text);
   border-left: 2px solid var(--green);
   backdrop-filter: none;
-  transition: all 0.2s ease;
 
-  &:has(&__content:hover) {
+  &:has(&__content.hovered) {
     z-index: 1;
     min-width: fit-content;
     min-height: fit-content;
@@ -177,7 +223,17 @@ function copyNumber(number: string) {
   &__content {
     display: flex;
     flex-direction: column;
-    min-height: 80px;
+    overflow: hidden;
+    padding: 2px 6px;
+
+    &.hovered {
+      min-height: 80px;
+    }
+  }
+
+  &__dots {
+    position: absolute;
+    right: 4px;
   }
 
   &__number {
