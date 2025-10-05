@@ -49,7 +49,7 @@ function logout() {
         @click="reservationsStore.openSearch()"
       >
         <IconSearch />
-        ⌘+Л Поиск по имени
+        ⌘+Л поиск по имени
       </button>
       <button class="app-header__theme-btn" @click="changeTheme">
         <IconSun />
@@ -103,7 +103,7 @@ function logout() {
         border: 1px solid var(--white-12);
         border-radius: 8px;
         color: var(--white-64);
-        padding: 8px 12px;
+        padding: 4px 8px;
         justify-content: start;
         flex: 1;
 

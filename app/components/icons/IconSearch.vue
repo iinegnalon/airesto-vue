@@ -14,14 +14,12 @@
       stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
-      stroke-opacity="0.48"
     />
     <path
       d="M16 16L13.1333 13.1333"
       stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
-      stroke-opacity="0.48"
     />
   </svg>
 </template>
