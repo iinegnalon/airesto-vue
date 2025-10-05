@@ -105,7 +105,7 @@ const contentHeight = computed(() => {
     offset = 6;
   }
 
-  return `calc(100% - ${clipPct.value}% - ${offset}px)`;
+  return `min(calc(100% - ${clipPct.value}% - ${offset}px), 80px)`;
 });
 
 onMounted(() => {
