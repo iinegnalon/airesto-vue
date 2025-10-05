@@ -187,6 +187,7 @@ function updateCurrentTime() {
 .booking-table-wrapper {
   display: flex;
   flex-direction: column;
+  min-width: 100%;
   width: fit-content;
 }
 
@@ -252,6 +253,8 @@ function updateCurrentTime() {
     width: fit-content;
     position: sticky;
     left: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
   }
 
   &__hours {
