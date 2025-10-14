@@ -1,8 +1,10 @@
-import mock from './mockData.json';
 import type { BookingResponse } from '@/models/reservations';
 
-export function fetchReservations(): Promise<BookingResponse> {
-  return new Promise<BookingResponse>((resolve) => {
-    setTimeout(() => resolve(mock as BookingResponse), 500);
-  });
+export async function fetchReservations(): Promise<BookingResponse> {
+  const response = await fetch('https://hh.frontend.ark.software/api/booking');
+  if (!response.ok) {
+    throw new Error(`Ошибка: ${response.status}`);
+  }
+  const data = (await response.json()) as BookingResponse;
+  return data;
 }
